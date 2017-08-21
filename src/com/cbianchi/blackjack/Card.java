@@ -8,9 +8,6 @@ public class Card {
 	private Rank rank;
 	private Suit suit;
 
-	// value = //can you parse an enum to an integer? Or i want to run a foreach
-	// loop that searches through a map to get this
-
 	public Card(Rank rank, Suit suit) {
 
 		this.rank = rank;
