@@ -90,8 +90,10 @@ public class GameApp {
 		}
 		System.out.println(getPlayerVal());
 		System.out.println();
+		System.out.println("Wallet: " + p1.getWallet() + "\tWager: " + p1.getWager());
+		System.out.println();
 
-		System.out.println("Dealer's Cards:");
+		System.out.println("\nDealer's Cards:");
 
 		if (dealerShowAmount.equals("ONE")) {
 			System.out.println(dealer.getHand().getCardsInHand().get(0));
