@@ -23,11 +23,6 @@ public class Hand {
 		}
 		
 		
-		public int getValueOfHand() {
-			
-			return 1; //change later
-		}
-		
 		public void resetHand() {
 			this.cardsInHand = new ArrayList<Card>();
 		}

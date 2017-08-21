@@ -18,7 +18,7 @@ public class GameApp {
 
 	static boolean game = true;
 	static boolean somebodyWins = false;
-	static String hitStaySplit;
+	static String hitStaySplit = "";
 
 	public static void main(String[] args) {
 
@@ -105,22 +105,7 @@ public class GameApp {
 			System.out.println(dealer.getHand().getCardsInHand().get(0));
 			System.out.println(dealer.getHand().getCardsInHand().get(1));
 		}
-		// List<Card> tempCardsInHand = dealer.getHand().getCardsInHand();
-		// Card noShowCard = tempCardsInHand.get(0);
-
-		// for (Card c : dealer.getHand().getCardsInHand()) { //regular for loop to hide
-		// the first card
-		//
-		// if (c == noShowCard) {
-		// System.out.println("Mystery Card.");
-		// }
-		// else if(c != noShowCard) {
-		// System.out.println(c);
-		// System.out.println(tempCardsInHand.get(1));
-		// //dealerVal = dealerVal + c.getRank().getValue();
-		// //dealer.get(arrDealer.size()-1);
-		// }
-		// }
+		
 	}
 
 	public void repromptWager() {
@@ -143,7 +128,7 @@ public class GameApp {
 
 		Card c1;
 		do {
-			System.out.println("Would you like to hit, stay, or split?: hit, stay, split");
+			System.out.println("Would you like to hit, or stay?: hit, stay");
 
 			hitStaySplit = keyboard.next().toLowerCase(); // formats their answer into all lower case
 
@@ -153,11 +138,6 @@ public class GameApp {
 				c1 = d1.dealCard();
 				p1.getHand().addCard(c1);
 
-				for (Card card1 : p1.getHand().getCardsInHand()) {
-					if (card1.getRank().equals(Rank.ACE) && playerVal > 21) {
-						playerVal = playerVal - 10;
-					}
-				}
 
 				if (getPlayerVal() > 21) {
 					showCards("ONE");
@@ -167,16 +147,8 @@ public class GameApp {
 				}
 			} else if (hitStaySplit.equals("stay")) {
 				showCards("ONE");
-
-			} else if (hitStaySplit.equals("split")) {
-				
-						//how do i do this split???!
-				// int x;
-				// x = p1.getHand().getValue
-				// showCards();
-				//
-				showCards("ONE"); //as long as the player's playing, we don't want him to see the cards
-			}
+			  }
+			
 		} while (!hitStaySplit.equalsIgnoreCase("stay"));
 	}
 
@@ -186,7 +158,7 @@ public class GameApp {
 			c1 = d1.dealCard();
 			dealer.getHand().addCard(c1);
 		}
-		showCards("ALL");
+		showCards("ALL"); //since dealer's turn is now, we are going to pass in the literal "ALL" so all cards will be shown
 	}
 
 	public void checkScore() {
@@ -195,14 +167,22 @@ public class GameApp {
 		int dealerVal = getDealerVal();
 		if (playerVal > 21 && dealerVal <= 21) {
 			System.out.println("Player Busted");
+			somebodyWins = true;
 		} else if (dealerVal > 21 && playerVal <= 21) {
 			System.out.println("Dealer Busted! Player wins!");
+			double x = p1.getWallet();
+			somebodyWins = true;
+			p1.setWallet(x + (p1.getWager() * 2)); //winning returns the bet and the winnings to the wallet
 		} else {
 			if (playerVal == dealerVal) {
 				System.out.println("You Push");
+				double x = p1.getWallet();
+				p1.setWallet(x + p1.getWager()); //push returns money back to players wallet
 				somebodyWins = true;
 			} else if (playerVal > dealerVal) {
 				System.out.println(" Player Wins");
+				double x = p1.getWallet();
+				p1.setWallet(x + (p1.getWager() * 2));
 				somebodyWins = true;
 			} else if (playerVal < dealerVal) {
 				System.out.println(" Dealer Wins");
@@ -214,10 +194,18 @@ public class GameApp {
 
 	public int getPlayerVal() {
 		int sum = 0;
-		for (Card c : p1.getHand().getCardsInHand()) {
-			sum = sum + c.getRank().getValue();
-
-		}
+			for (Card c : p1.getHand().getCardsInHand()) {
+				sum = sum + c.getRank().getValue();
+			}	
+			
+			if (sum > 21) {								
+				for (Card c : p1.getHand().getCardsInHand()) { //thing about this section is that we need to know if the sum>21, before we go checking for aces at all 
+					if (c.getRank() == Rank.ACE) {//so if it is, let's see if ones an ace, then we'll take 10 off the value
+						sum = sum - 10;
+					}
+				}
+			}
+			
 		return sum;
 	}
 
@@ -227,16 +215,26 @@ public class GameApp {
 			sum = sum + c.getRank().getValue();
 
 		}
+		
+		if (sum > 21) {
+			for (Card c : p1.getHand().getCardsInHand()) {
+				if (c.getRank() == Rank.ACE) {
+					sum = sum - 10;
+				}
+			}
+		}
 		return sum;
 	}
 
 	public void resetGame() {
 		p1.getHand().resetHand();
 		dealer.getHand().resetHand();
+		p1.resetWager(); //sets the wager back down to 0
+		playerVal = 0;
 	}
 	
 	public void checkWallet() {
-		if(p1.getWallet() < 0) {
+		if(p1.getWallet() <= 0) {
 			System.out.println("You are out of money. Come back later.");
 			game = false;
 		}
@@ -256,9 +254,9 @@ public class GameApp {
 // if dealer breaks, player wins
 // provide appropriate message
 // ask if they want to play again
-//
-//
-//
-//
-//
-//
+
+
+
+
+
+

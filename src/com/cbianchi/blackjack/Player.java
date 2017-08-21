@@ -66,6 +66,9 @@ public class Player {
 		this.wager = (double)wager;
 	}
 	
+	public void resetWager() {
+		this.wager = 0;
+	}
 	
 	
 	
