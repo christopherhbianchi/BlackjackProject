@@ -121,7 +121,7 @@ public class GameApp {
 			p1.setWager((input.equals("y")) ? (2 * x) : (x)); // doubles the wage if they say Yes
 
 			if (input.equals("y")) {
-				p1.setWallet(p1.getWallet() - p1.getWager()); // takes
+				p1.setWallet(p1.getWallet() - p1.getWager() + x); // so you wouldn't be taking 3 times the wager out of the bank account versus the normal double
 			}
 		}
 	}
@@ -168,26 +168,35 @@ public class GameApp {
 		int playerVal = getPlayerVal();
 		int dealerVal = getDealerVal();
 		if (playerVal > 21 && dealerVal <= 21) {
+			System.out.println();
 			System.out.println("Player Busted");
+			System.out.println();
+			System.out.println("Wallet: " + p1.getWallet());
+			System.out.println();
 			somebodyWins = true;
 		} else if (dealerVal > 21 && playerVal <= 21) {
 			System.out.println("Dealer Busted! Player wins!");
 			double x = p1.getWallet();
 			somebodyWins = true;
 			p1.setWallet(x + (p1.getWager() * 2)); //winning returns the bet and the winnings to the wallet
+			System.out.println("Wallet: " + p1.getWallet());
+
 		} else {
 			if (playerVal == dealerVal) {
 				System.out.println("You Push");
 				double x = p1.getWallet();
 				p1.setWallet(x + p1.getWager()); //push returns money back to players wallet
+				System.out.println("Wallet: " + p1.getWallet());
 				somebodyWins = true;
 			} else if (playerVal > dealerVal) {
 				System.out.println(" Player Wins");
 				double x = p1.getWallet();
 				p1.setWallet(x + (p1.getWager() * 2));
+				System.out.println("Wallet: " + p1.getWallet());
 				somebodyWins = true;
 			} else if (playerVal < dealerVal) {
 				System.out.println(" Dealer Wins");
+				System.out.println("Wallet: " + p1.getWallet());
 				somebodyWins = true;
 			}
 		}
